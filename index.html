@@ -16,7 +16,7 @@
     .controls{display:flex;gap:10px;margin-top:14px}.controls button,.dpad button{background:#111b22;color:#e6f0e9;border:1px solid #263740;border-radius:11px;padding:11px 14px;font:600 13px 'Space Grotesk';cursor:pointer}.controls button:hover,.dpad button:hover{border-color:#6a9b58;color:var(--green)}.controls .grow{flex:1}
     .bottom{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:#71838d;font-size:11px}.keys{font-family:'DM Mono',monospace;color:#a5b4b9}.dpad{display:grid;grid-template-columns:repeat(3,72px);grid-template-rows:repeat(2,64px);gap:9px;justify-content:center;margin:18px auto 0;padding:12px;width:max-content;background:linear-gradient(145deg,#142129,#0d151b);border:1px solid #294039;border-radius:20px;box-shadow:0 10px 28px #0006,inset 0 1px #ffffff0a}.dpad button{padding:0;font-size:27px;min-width:64px;min-height:58px;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;background:linear-gradient(145deg,#1c2c32,#101a20);border:1px solid #45634c;border-radius:15px;color:#baff8b;box-shadow:0 4px 0 #080e12,0 0 16px #a3ff5f12;transition:transform .08s,border-color .08s,background .08s}.dpad button:active{transform:translateY(3px);background:#29432b;border-color:#a3ff5f;box-shadow:0 1px 0 #080e12,0 0 20px #a3ff5f35}.dpad button:focus-visible{outline:2px solid var(--green);outline-offset:3px}.dpad .up{grid-column:2}.dpad .left{grid-column:1;grid-row:2}.dpad .down{grid-column:2;grid-row:2}.dpad .right{grid-column:3;grid-row:2}
     .shell:fullscreen{width:100%;height:100%;max-width:none;overflow:auto;background:radial-gradient(ellipse at 50% 0%,#14251f 0%,#090d12 48%);padding:clamp(12px,3vh,28px);display:flex;flex-direction:column;justify-content:center}.shell:fullscreen .board-wrap{width:min(100%,min(72vh,760px));margin:0 auto}.shell:fullscreen .stats,.shell:fullscreen header,.shell:fullscreen .controls,.shell:fullscreen .bottom{width:min(100%,760px);margin-left:auto;margin-right:auto}.shell:fullscreen .controls{margin-top:12px}.shell:fullscreen .bottom{margin-top:12px}
-    .joystick-wrap{display:none}@media(max-width:520px){body{padding:10px 10px 180px;display:block}.shell{width:min(100%,560px);margin:0 auto}header{margin-bottom:14px}.joystick-wrap{display:block;position:fixed;z-index:1000;right:18px;bottom:calc(22px + env(safe-area-inset-bottom));width:142px;text-align:center;touch-action:none;user-select:none;-webkit-user-select:none}.joystick-label{font:10px 'DM Mono',monospace;letter-spacing:2px;color:#a3ff5f;margin-bottom:7px;text-shadow:0 0 10px #a3ff5f88}.joystick{width:132px;height:132px;margin:auto;position:relative;border-radius:50%;background:radial-gradient(circle at 35% 30%,#263b35,#101a20 70%);border:2px solid #6b9b59;box-shadow:0 0 0 5px #090d12cc,0 8px 28px #000c,0 0 24px #a3ff5f35;touch-action:none}.joystick-ring{position:absolute;inset:12px;border:1px dashed #54734c;border-radius:50%;pointer-events:none}.joystick-knob{position:absolute;width:56px;height:56px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:linear-gradient(145deg,#caff9e,#68c94b);border:2px solid #e0ffc9;box-shadow:0 4px 12px #0009,0 0 22px #a3ff5f77;pointer-events:none;transition:box-shadow .1s}.joystick.active .joystick-knob{box-shadow:0 2px 8px #0009,0 0 28px #a3ff5fbb}.controls button{min-height:48px}.bottom{font-size:10px}.pill{font-size:9px}}
+    .display:block}.shell{width:min(100%,560px);margin:0 auto}header{margin-bottom:14px}.controls button{min-height:48px}.bottom{font-size:10px}.pill{font-size:9px}}
   </style>
 </head>
 <body>
@@ -31,8 +31,7 @@
       <canvas class="board" id="game" width="480" height="480" aria-label="Snake Spielfeld"></canvas>
       <div class="overlay" id="overlay"><div class="modal"><h2 id="headline">Ready to play?</h2><p id="message">Sammle die Energie-Orbs. Je länger du wirst,<br> desto schneller wird das Spiel.</p><button class="primary" id="start">Spiel starten&nbsp; →</button></div></div>
     </div>
-    <div class="controls"><button class="grow" id="pause">Ⅱ &nbsp;Pause</button><button id="restart">↻ &nbsp;Neustart</button><button id="fullscreen" aria-label="Toggle fullscreen">⛶ &nbsp;Fullscreen</button></div>
-    <div class="joystick-wrap" aria-label="Mobile joystick"><div class="joystick-label">MOVE</div><div class="joystick" id="joystick" role="application" aria-label="Drag joystick to steer"><div class="joystick-ring"></div><div class="joystick-knob" id="joystickKnob"></div></div></div>
+    <div class="controls"><button class="grow" id="pause">Ⅱ &nbsp;Pause</button><button id="restart">↻ &nbsp;Neustart</button><button id="fullscreen" aria-label="Toggle fullscreen">⛶ &nbsp;Fullscreen</button></div></div>
     <div class="bottom"><span>MOVE <span class="keys">W A S D</span> / <span class="keys">← ↑ ↓ →</span></span><span>DON'T HIT THE WALLS</span></div>
   </main>
 <script>
@@ -65,28 +64,6 @@
   fullscreenButton.addEventListener('click',toggleFullscreen);document.addEventListener('fullscreenchange',updateFullscreenButton);document.addEventListener('webkitfullscreenchange',updateFullscreenButton);
   document.getElementById('restart').addEventListener('click',()=>{clearInterval(timer);running=false;paused=false;over=true;reset();document.getElementById('headline').textContent='Ready to play?';document.getElementById('message').innerHTML='Sammle die Energie-Orbs. Je länger du wirst,<br> desto schneller wird das Spiel.';document.getElementById('start').textContent='Spiel starten  →';overlay.classList.remove('hidden')});
   document.addEventListener('keydown',e=>{const map={ArrowUp:'up',w:'up',W:'up',ArrowDown:'down',s:'down',S:'down',ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right'};if(map[e.key]){e.preventDefault();setDir(map[e.key])}if(e.code==='Space'){e.preventDefault();if(over)start();else pause()}});
-  // Analog-style mobile joystick: drag in any direction to steer continuously.
-  const joystick=document.getElementById('joystick'),joystickKnob=document.getElementById('joystickKnob');
-  if(joystick&&joystickKnob){
-    let stickPointer=null;
-    function steerStick(e){
-      const r=joystick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
-      let dx=e.clientX-cx,dy=e.clientY-cy;
-      const max=34,len=Math.hypot(dx,dy);
-      if(len>max){dx=dx/len*max;dy=dy/len*max}
-      joystickKnob.style.left=`calc(50% + ${dx}px)`;
-      joystickKnob.style.top=`calc(50% + ${dy}px)`;
-      if(Math.hypot(dx,dy)>9){
-        const d=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');
-        setDir(d);
-      }
-    }
-    joystick.addEventListener('pointerdown',e=>{e.preventDefault();stickPointer=e.pointerId;joystick.setPointerCapture(e.pointerId);joystick.classList.add('active');if(over)start();steerStick(e)});
-    joystick.addEventListener('pointermove',e=>{if(e.pointerId===stickPointer){e.preventDefault();steerStick(e)}});
-    function releaseStick(e){if(stickPointer===e.pointerId){stickPointer=null;joystick.classList.remove('active');joystickKnob.style.left='50%';joystickKnob.style.top='50%'}}
-    joystick.addEventListener('pointerup',releaseStick);
-    joystick.addEventListener('pointercancel',releaseStick);
-  }
   // Swipe anywhere on the board to steer on phones and tablets.
   let swipeStart=null;
   function beginSwipe(x,y){swipeStart={x,y}}
