@@ -17,7 +17,7 @@ Fast to learn, tricky to master. Guide your snake around the board, collect appl
 - ✨ **Neon arcade look** with a dark, glowing game board
 - 🎨 **Two colour themes** to choose from
 - 🏆 **High-score tracking** saved in your browser
-- 📱 **Touch-friendly controls** with swipe and on-screen direction buttons
+- 📱 **Touch-friendly swipe controls** for phones and tablets
 - ⌨️ **Keyboard support** for desktop play
 - ⏸️ **Pause, restart, and fullscreen** whenever you need them
 - ⚡ **Consistent game speed** — the challenge comes from your skills
@@ -27,7 +27,7 @@ Fast to learn, tricky to master. Guide your snake around the board, collect appl
 | Action | How to play |
 | --- | --- |
 | Move | Arrow keys or **W A S D** |
-| Mobile movement | Swipe on the board or use the direction pad |
+| Mobile movement | Swipe on the board |
 | Pause / resume | **Space** or the Pause button |
 | Start / restart | Use the on-screen buttons |
 | Fullscreen | Select **Fullscreen** |
