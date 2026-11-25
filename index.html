@@ -54,25 +54,31 @@
   function start(){if(running)return;reset();running=true;paused=false;over=false;overlay.classList.add('hidden');clearInterval(timer);timer=setInterval(step,tick)}
   function endGame(){running=false;over=true;clearInterval(timer);document.getElementById('headline').textContent='Game over';document.getElementById('message').innerHTML='Score: <b style="color:#a3ff5f">'+score+'</b> · Versuch es gleich nochmal!';document.getElementById('start').textContent='Nochmal spielen  →';overlay.classList.remove('hidden')}
   function pause(){if(over)return;if(paused){paused=false;running=true;timer=setInterval(step,tick);document.getElementById('pause').textContent='Ⅱ  Pause';overlay.classList.add('hidden')}else{paused=true;running=false;clearInterval(timer);document.getElementById('headline').textContent='Paused';document.getElementById('message').textContent='Kurze Verschnaufpause?';document.getElementById('start').textContent='Weiter spielen  →';overlay.classList.remove('hidden');document.getElementById('pause').textContent='▶  Weiter'}}
-  function setDir(d){const dirs={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};const n=dirs[d];if(n&&!(n.x===-dir.x&&n.y===-dir.y))nextDir=n}
+  function setDir(d){const dirs={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};const n=dirs[d];if(!n)return;if(over){start()}if(!(n.x===-dir.x&&n.y===-dir.y))nextDir=n}
   document.getElementById('start').addEventListener('click',()=>{if(paused){pause();return}start();document.getElementById('start').textContent='Spiel starten  →'});
   document.getElementById('pause').addEventListener('click',pause);document.getElementById('restart').addEventListener('click',()=>{clearInterval(timer);running=false;paused=false;over=true;reset();document.getElementById('headline').textContent='Ready to play?';document.getElementById('message').innerHTML='Sammle die Energie-Orbs. Je länger du wirst,<br> desto schneller wird das Spiel.';document.getElementById('start').textContent='Spiel starten  →';overlay.classList.remove('hidden')});
   document.addEventListener('keydown',e=>{const map={ArrowUp:'up',w:'up',W:'up',ArrowDown:'down',s:'down',S:'down',ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right'};if(map[e.key]){e.preventDefault();setDir(map[e.key])}if(e.code==='Space'){e.preventDefault();if(over)start();else pause()}});
   document.querySelectorAll('[data-dir]').forEach(b=>{
-    b.addEventListener('click',()=>setDir(b.dataset.dir));
-    b.addEventListener('pointerdown',e=>{e.preventDefault();setDir(b.dataset.dir)});
+    const move=()=>setDir(b.dataset.dir);
+    b.addEventListener('click',move);
+    b.addEventListener('touchstart',e=>{e.preventDefault();move()},{passive:false});
   });
   // Swipe anywhere on the board to steer on phones and tablets.
   let swipeStart=null;
-  canvas.addEventListener('pointerdown',e=>{swipeStart={x:e.clientX,y:e.clientY};});
-  canvas.addEventListener('pointerup',e=>{
+  function beginSwipe(x,y){swipeStart={x,y}}
+  function finishSwipe(x,y){
     if(!swipeStart)return;
-    const dx=e.clientX-swipeStart.x,dy=e.clientY-swipeStart.y;
+    const dx=x-swipeStart.x,dy=y-swipeStart.y;
     swipeStart=null;
     if(Math.max(Math.abs(dx),Math.abs(dy))<18)return;
     setDir(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));
-  });
+  }
+  canvas.addEventListener('pointerdown',e=>beginSwipe(e.clientX,e.clientY));
+  canvas.addEventListener('pointerup',e=>finishSwipe(e.clientX,e.clientY));
   canvas.addEventListener('pointercancel',()=>{swipeStart=null});
+  canvas.addEventListener('touchstart',e=>{const t=e.changedTouches[0];beginSwipe(t.clientX,t.clientY)},{passive:true});
+  canvas.addEventListener('touchend',e=>{const t=e.changedTouches[0];finishSwipe(t.clientX,t.clientY)},{passive:true});
+  canvas.addEventListener('touchcancel',()=>{swipeStart=null},{passive:true});
   reset();
 })();
 </script>
