@@ -29,7 +29,7 @@
     </section>
     <div class="board-wrap">
       <canvas class="board" id="game" width="480" height="480" aria-label="Snake Spielfeld"></canvas>
-      <div class="overlay" id="overlay"><div class="modal"><h2 id="headline">Ready to play?</h2><p id="message">Sammle die Energie-Orbs und vermeide die Wände und deinen eigenen Schwanz.</p><div class="theme-picker" aria-label="Choose a colour theme"><button type="button" class="theme-choice selected" data-theme="red" aria-pressed="true">🔴 Red snake · 🍏 Green apple</button><button type="button" class="theme-choice" data-theme="green" aria-pressed="false">🟢 Green snake · 🍎 Red apple</button></div><button class="primary" id="start">Spiel starten&nbsp; →</button></div></div>
+      <div class="overlay" id="overlay"><div class="modal"><h2 id="headline">Ready to play?</h2><p id="message">Sammle die Energie-Orbs und vermeide die Wände und deinen eigenen Schwanz.</p><div class="theme-picker" aria-label="Choose a colour theme"><button type="button" class="theme-choice" data-theme="red" aria-pressed="false">🔴 Red snake · 🍏 Green apple</button><button type="button" class="theme-choice selected" data-theme="green" aria-pressed="true">🟢 Green snake · 🍎 Red apple</button></div><button class="primary" id="start">Spiel starten&nbsp; →</button></div></div>
     </div>
     <div class="controls"><button class="grow" id="pause">Ⅱ &nbsp;Pause</button><button id="restart">↻ &nbsp;Neustart</button><button id="fullscreen" aria-label="Toggle fullscreen">⛶ &nbsp;Fullscreen</button></div></div>
     <div class="bottom"><span>MOVE <span class="keys">W A S D</span> / <span class="keys">← ↑ ↓ →</span></span><span>DON'T HIT THE WALLS</span></div>
@@ -38,7 +38,7 @@
 (() => {
   const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),overlay=document.getElementById('overlay');
   const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best');
-  const SIZE=24,CELL=20,STEP_MS=145;let snake,food,dir,nextDir,score,theme='red',best=0,running=false,paused=false,over=true,timer=null;
+  const SIZE=24,CELL=20,STEP_MS=145;let snake,food,dir,nextDir,score,theme='green',best=0,running=false,paused=false,over=true,timer=null;
   try{best=Math.max(0,Number(localStorage.getItem('neonSnakeBest'))||0)}catch(e){best=0}
   bestEl.textContent=String(best).padStart(3,'0');
   function reset(){snake=[{x:8,y:12},{x:7,y:12},{x:6,y:12}];dir={x:1,y:0};nextDir={x:1,y:0};score=0;placeFood();updateStats();draw()}
